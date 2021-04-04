@@ -17,10 +17,11 @@ class Book extends Component{
         return (
             <div className="book">
                 <div className="book-top">
-                    <div className="book-cover" 
+                    { book.imageLinks === undefined ? "" :
+                        <div className="book-cover" 
                         style={
-                            { width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>       
-                    
+                            { width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
+                    }
                     <div className="book-shelf-changer">
                         <select onClick={(event) => this.changeShelf(event.target.value)}>
                             <option value="move" disabled>Move to...</option>
@@ -32,7 +33,7 @@ class Book extends Component{
                     </div>
                 </div>
                 <div className="book-title">{book.title}</div>
-                <div className="book-authors">{book.authors}</div>
+                {book.authors === undefined ? "" : <div className="book-authors">{book.authors}</div>}
             </div>
             
         )

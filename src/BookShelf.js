@@ -14,7 +14,7 @@ const BookShelf = (props) => {
 }
 
 const shelfRename = (shelfString) =>{
-    let name = 'None'
+    
     if(shelfString === 'currentlyReading'){
         return 'Currently Reading'
     }else if(shelfString === 'wantToRead'){
@@ -22,7 +22,7 @@ const shelfRename = (shelfString) =>{
     }else if(shelfString === 'read'){
         return 'Read'
     }
-    return name
+
 }
 
 BookShelf.prototypes = {

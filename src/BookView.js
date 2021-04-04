@@ -25,6 +25,7 @@ class BookView extends Component{
                     </div>
                     
                 )
+                console.log(display)
             }
 
             display.push(

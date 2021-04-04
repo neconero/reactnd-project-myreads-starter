@@ -30,6 +30,7 @@ class Search extends Component {
 
     isTermExist = (term) => {
         let terms = searchTerm()
+        terms.forEach(t => t.toLocaleLowerCase())
         let wordCount =terms.indexOf(term)
 
         return wordCount > -1

@@ -1,6 +1,17 @@
 import React, { Component} from 'react'
+import PropTypes from 'prop-types'
 
 class Book extends Component{
+
+    static propTypes = {
+        onShelfChange: PropTypes.func.isRequired,
+        book: PropTypes.object.isRequired,
+    }
+
+    changeShelf = (shelf) => {
+        this.props.onShelfChange(this.props.book, shelf)
+    }
+    
     render(){
         const {book} = this.props
         return (
@@ -11,7 +22,7 @@ class Book extends Component{
                             { width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>       
                     
                     <div className="book-shelf-changer">
-                        <select>
+                        <select onClick={(event) => this.changeShelf(event.target.value)}>
                             <option value="move" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>
@@ -27,5 +38,6 @@ class Book extends Component{
         )
     }
 }
+
 
 export default Book

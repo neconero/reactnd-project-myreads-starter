@@ -1,11 +1,16 @@
 import React, { Component} from 'react'
+import PropTypes from 'prop-types'
 import BookShelf from './BookShelf'
 import Book from './Book'
 
 class BookView extends Component{
+    static propTypes = {
+        books: PropTypes.array.isRequired,
+        shelfChange: PropTypes.func.isRequired
+    }
     render() {
-        const {books} = this.props
-        console.log(books)
+        const {books, shelfChange} = this.props
+        
         const display= []
         let optionStatus = null
 
@@ -26,7 +31,7 @@ class BookView extends Component{
                 <div className="bookshelf-books">
                     <ol className="books-grid">
                         <li >
-                            <Book book={book} key={book.title} />
+                            <Book book={book} key={book.title}  onShelfChange={shelfChange}/>
                         </li>
                     </ol>
                 </div>
@@ -35,7 +40,7 @@ class BookView extends Component{
 
             optionStatus = book.shelf
         })
-        console.log(display)
+        
         return(
             <div>{display}</div>
         )

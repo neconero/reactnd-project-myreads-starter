@@ -1,16 +1,16 @@
-import React, { Component} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
-class BookShelf extends Component{
-    render() {
-        const {shelf} = this.props
-        let shelfName = shelfRename(shelf)
-        return (
-            <div className="bookshelf">
-                <h2 className="bookshelf-title">{shelfName}</h2>
-            </div>
-            
-        )
-    }
+
+const BookShelf = (props) => {
+    const {shelf} = props
+    let shelfName = shelfRename(shelf)
+    return (
+        <div className="bookshelf">
+            <h2 className="bookshelf-title">{shelfName}</h2>
+        </div>
+        
+    )
 }
 
 const shelfRename = (shelfString) =>{
@@ -23,6 +23,10 @@ const shelfRename = (shelfString) =>{
         return 'Read'
     }
     return name
+}
+
+BookShelf.prototypes = {
+    shelf: PropTypes.func.isRequired
 }
 
 export default BookShelf

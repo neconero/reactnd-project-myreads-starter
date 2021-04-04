@@ -20,7 +20,7 @@ class BookView extends Component{
                     <div className="bookshelf">
                         <BookShelf 
                             shelf={book.shelf}
-                            key={book.shelf}
+                            
                         />
                     </div>
                     
@@ -31,7 +31,7 @@ class BookView extends Component{
             display.push(
                 <div className="bookshelf-books">
                     <ol className="books-grid">
-                        <li >
+                        <li key={book.title}>
                             <Book book={book} key={book.title}  onShelfChange={shelfChange}/>
                         </li>
                     </ol>

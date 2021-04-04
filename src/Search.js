@@ -10,19 +10,20 @@ class Search extends Component {
         results: []
     }
 
-
+    
 
     updateQuery = (query) => {
-        this.setState(() => ({query: query.trim()}), () => {
-            if(this.state.query && this.state.query.length > 1 ){
+        this.setState(() => ({query: query}), () => {
+            if(this.state.query && this.state.query.length > 0 ){
                 if(this.isTermExist(this.state.query)){
-                    this.searchLibrary(query)
+                    
+                    this.searchLibrary(query.trim())
                     
                 }else{
                     return "Enter the Right Query Term"
                 }
                 
-            }else if(!this.state.query){
+            }else if(this.state.query === ''){
                 return 
             }
         })
@@ -42,6 +43,7 @@ class Search extends Component {
 
     handleOnInputChange = (event) => {
         const query = event.target.value
+
         this.updateQuery(query)
         
     }
@@ -58,7 +60,7 @@ class Search extends Component {
     render() {
         const {query} = this.state
         const {shelfChange} = this.props
-        console.log(this.state.results)
+        
         
         return(
             <div>
@@ -79,15 +81,18 @@ class Search extends Component {
                             />
                         </div>
                     </div>
-                    <div className="search-books-results">
-                        <ol className="books-grid">
-                            {this.state.results.map(book => (
-                                <li>
-                                    <Book book={book} key={book.title} onShelfChange={shelfChange} />
-                                </li>
-                            ))}
-                        </ol>
-                    </div>
+                    {this.state.query !== '' &&  
+                        <div className="search-books-results">
+                            <ol className="books-grid">
+                                {this.state.results.map((book, index) => (
+                                    <li key={index}>
+                                        <Book book={book} key={index} onShelfChange={shelfChange} />
+                                    </li>
+                                ))}
+                            </ol>
+                        </div>
+                    }
+                    
                 </div>
             </div>
         )

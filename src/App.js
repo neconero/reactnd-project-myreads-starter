@@ -6,10 +6,17 @@ import ListBooks from './ListBooks'
 import './App.css'
 
 class BooksApp extends React.Component {
- 
-  state = {
-    books: []
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      books: []
+    }
+
+    
   }
+ 
+  
 
   componentDidMount(){
       BooksAPI.getAll()
@@ -20,6 +27,8 @@ class BooksApp extends React.Component {
       })
   }
 
+  
+
   uhelper = (arr, doc, shelf) => {
     arr[arr.findIndex((arrElement) => 
       arrElement.title === doc.title
@@ -29,9 +38,18 @@ class BooksApp extends React.Component {
   }
   updateShelf = (book, shelf) => {
     BooksAPI.update(book, shelf)
-    this.setState((currentState) => ({
-      books: this.uhelper(currentState.books, book, shelf)
-    }))
+      .then((response) => {
+        this.state.books.forEach((bookEl) => {
+          if(bookEl.title === book.title){
+            bookEl.shelf = shelf
+          }
+        })
+      })
+      .then(() => {
+        this.setState({
+          books: this.state.books
+        })
+      }) 
   }
 
   
@@ -42,11 +60,11 @@ class BooksApp extends React.Component {
             <Route exact path='/' render={() => (
               <ListBooks 
                 books={this.state.books}
-                shelfChange={this.updateShelf}
+                shelfChange={this.updateShelf.bind(this)}
               />
             )} />
             <Route path='/search' render={(history) => (
-              <Search shelfChange={this.updateShelf}/>
+              <Search shelfChange={this.updateShelf.bind(this)}/>
             )} />
           </div>
       )

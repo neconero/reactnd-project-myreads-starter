@@ -14,15 +14,12 @@ class Search extends Component {
 
     updateQuery = (query) => {
         this.setState(() => ({query: query}), () => {
-            if(this.state.query && this.state.query.length > 0 ){
-                if(this.isTermExist(this.state.query)){
-                    
-                    this.searchLibrary(query.trim())
-                    
-                }else{
-                    return "Enter the Right Query Term"
-                }
-                
+            if(this.state.query && this.state.query.length > 0 ){    
+                let word = this.isTermExist(this.state.query)
+                if(word === 'Not a search term'){
+                    return 'Not a search term'
+                }   
+                this.searchLibrary(word)    
             }else if(this.state.query === ''){
                 return 
             }
@@ -31,15 +28,18 @@ class Search extends Component {
 
     isTermExist = (term) => {
         let terms = searchTerm()
-        terms.forEach(t => t.toLocaleLowerCase())
-        let wordCount =terms.indexOf(term)
+        let filterArr = terms.filter((word) => {
+            return word.toLowerCase().includes(term)   
+          })
+        if(filterArr === null){
+            return "Not a search term"
+        }
+        let term_found =  filterArr[Math.floor(Math.random()*filterArr.length)]
 
-        return wordCount > -1
+        return term_found
     }
 
-    clearQuery = () => {
-        this.updateQuery('')
-    }
+    
 
     handleOnInputChange = (event) => {
         const query = event.target.value
@@ -51,9 +51,17 @@ class Search extends Component {
     searchLibrary = (query) => {
         BooksAPI.search(query)
           .then((books) => {
+            books.forEach((book) =>{
+                if(book.shelf === undefined){
+                  book.shelf = "none"
+                }
+              })
             this.setState(() => ({
               results: books
             }))
+          })
+          .catch(error => {
+              throw(error)
           })
       }
 
@@ -84,7 +92,7 @@ class Search extends Component {
                     {this.state.query !== '' &&  
                         <div className="search-books-results">
                             <ol className="books-grid">
-                                {this.state.results.map((book, index) => (
+                                {this.state.results && this.state.results.map((book, index) => (
                                     <li key={index}>
                                         <Book book={book} key={index} onShelfChange={shelfChange} />
                                     </li>

@@ -37,6 +37,7 @@ class BooksApp extends React.Component {
     return arr
   }
   updateShelf = (book, shelf) => {
+
     BooksAPI.update(book, shelf)
       .then((response) => {
         this.state.books.forEach((bookEl) => {
@@ -44,11 +45,12 @@ class BooksApp extends React.Component {
             bookEl.shelf = shelf
           }
         })
-      })
-      .then(() => {
         this.setState({
           books: this.state.books
         })
+      })
+      .catch(() => {
+        console.error("Failed to find books")
       }) 
   }
 
@@ -64,7 +66,7 @@ class BooksApp extends React.Component {
               />
             )} />
             <Route path='/search' render={(history) => (
-              <Search shelfChange={this.updateShelf.bind(this)}/>
+              <Search books={this.state.books} shelfChange={this.updateShelf.bind(this)}/>
             )} />
           </div>
       )

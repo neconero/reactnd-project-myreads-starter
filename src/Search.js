@@ -7,7 +7,8 @@ import searchTerm from './searchTerms'
 class Search extends Component {
     state = {
         query: '',
-        results: []
+        results: [],
+        error: false
     }
 
     
@@ -40,7 +41,6 @@ class Search extends Component {
     }
 
     
-
     handleOnInputChange = (event) => {
         const query = event.target.value
 
@@ -48,26 +48,41 @@ class Search extends Component {
         
     }
 
-    searchLibrary = (query) => {
-        BooksAPI.search(query)
-          .then((books) => {
-            books.forEach((book) =>{
-                if(book.shelf === undefined){
-                  book.shelf = "none"
-                }
-              })
+     bookShelfCheck = (book) => {
+        this.props.books.forEach(bookEl => {
+            if(bookEl.title === book.title){
+                book.shelf = bookEl.shelf
+            }
+        })
+    }
+
+    searchLibrary = async (query) => {
+
+        try {
+            const books = await BooksAPI.search(query)
+            await books.forEach((book) =>{
+                        if(book.shelf === undefined){
+                            book.shelf = "none"
+                        }
+                        this.bookShelfCheck(book)
+                    })
+            
             this.setState(() => ({
-              results: books
+                results: books
             }))
-          })
-          .catch(error => {
-              throw(error)
-          })
+        } catch (error) {
+            this.setState({ error: true, query: '' })
+            alert('Wrong search query please try again...')
+        }
+        
+          
       }
 
     render() {
         const {query} = this.state
         const {shelfChange} = this.props
+
+        
         
         
         return(
@@ -89,7 +104,7 @@ class Search extends Component {
                             />
                         </div>
                     </div>
-                    {this.state.query !== '' &&  
+                    {this.state.query !== ''  &&  
                         <div className="search-books-results">
                             <ol className="books-grid">
                                 {this.state.results && this.state.results.map((book, index) => (

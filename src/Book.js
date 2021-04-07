@@ -8,7 +8,9 @@ class Book extends Component{
         book: PropTypes.object.isRequired,
     }
 
-    changeShelf = (shelf) => {
+    changeShelf = (event) => {
+        event.preventDefault();
+        const shelf = event.target.value
         this.props.onShelfChange(this.props.book, shelf)
     }
     
@@ -23,7 +25,7 @@ class Book extends Component{
                             { width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
                     }
                     <div className="book-shelf-changer">
-                        <select onClick={(event) => this.changeShelf(event.target.value)}>
+                        <select onClick={this.changeShelf} value={book.shelf}>
                             <option value="move" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>
